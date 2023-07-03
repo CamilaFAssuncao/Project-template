@@ -4,9 +4,6 @@ const container = document.querySelector(".container");
 const cityNameContainer = document.querySelector('.city-name');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-// Event will start on a keyup action
-searchBar.addEventListener('keyup', proceedWithSearch);
-
 const proceedWithSearch = async (event) => {
     if(event.key === "Enter") {
         // Store target in variable
@@ -22,9 +19,8 @@ const proceedWithSearch = async (event) => {
         console.error('Error');
     }}
 }
-
     
-    const fetchLatLonData = async () => {
+const fetchLatLonData = async (thisCity) => {
         const apiUrl = "https://api.openweathermap.org/data/2.5/forecast/?q=" + thisCity + "&appid=" + Data.key;
         try {
             const response = await fetch (apiUrl);
@@ -36,30 +32,24 @@ const proceedWithSearch = async (event) => {
         }
         catch (error) {
             console.error('Error:', "not a place!");
-            // Removing all child elements from Container before creating new set of elements
             container.innerHTML = '';
             return alert("Are you sure you aren't holding your map upside down?");   
         }};
-});
-
-
-   
+  
 // Fetching final data according to the coordinates
 const fetchWeatherData = async (lat, lon) => {
     try {
-        fetchLatLonData (lat, lon);
         const response = await fetch ("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&cnt=5&units=metric&exclude=minutely,hourly,alerts&appid=" + Data.key);
         const data = await response.json();
         console.log('Welcome to this basic weather app. this is not a product but the product of an academic exercise.');
-        createCards();
         return data;
     }
     catch (error) {
         console.error('Error');
     }}; 
            
-const createCards = async () => {
-// Create the elements with Data
+const createCards = async (data) => {
+
 const card = document.createElement('div');
 card.classList.add("card");
 container.appendChild(card);
@@ -115,6 +105,9 @@ maxTemp.classList.add("max-temp")
 maxTemp.innerHTML = data.temp.max + "°C";
 minMaxTemperatures.appendChild(maxTemp);
 }
+
+// Event will start on a keyup action
+searchBar.addEventListener('keyup', proceedWithSearch);
 
 // Looping through 5 days of weather data
     for(let i = 0; i < 5; i++) {
