@@ -2,6 +2,7 @@ import Data from "./config.js";
 const searchBar = document.querySelector('#searchBar');
 const container = document.querySelector(".container");
 const cityNameContainer = document.querySelector('.city-name');
+const apiUrl = "https://api.openweathermap.org/data/2.5/forecast/?q=" + thisCity + "&appid=" + Data.key;
 
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 console.log("hello world")
@@ -11,24 +12,30 @@ searchBar.addEventListener('keyup', (event) => {
     if(event.key === "Enter") {
         // Store target in variable
         const thisCity = event.target.value.toLowerCase();
-        const apiUrl = "https://api.openweathermap.org/data/2.5/forecast/?q=" + thisCity + "&appid=" + Data.key;
+        
         event.currentTarget.value = '';
-        // Fetching first api to get the City coordinates
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const lon = data.city.coord.lon;
-                const lat = data.city.coord.lat;
+    }
+});
 
-                cityNameContainer.innerHTML = data.city.name;
 
-                // Fetching final data according to the coordinates
-                fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&cnt=5&units=metric&exclude=minutely,hourly,alerts&appid=" + Data.key)
-                    .then(response => response.json())
-                    .then(result => {
-                        console.log('Welcome to this basic weather app. this is not a product but the product of an academic exercise.')
+// Fetching first api to get the City coordinates
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const lon = data.city.coord.lon;
+            const lat = data.city.coord.lat;
+            cityNameContainer.innerHTML = data.city.name;
+        });
 
-                        // Removing all child elements from Container before creating new set of elements
+
+// Fetching final data according to the coordinates
+    fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&cnt=5&units=metric&exclude=minutely,hourly,alerts&appid=" + Data.key)
+        .then(response => response.json())
+        .then(result => {
+            console.log('Welcome to this basic weather app. this is not a product but the product of an academic exercise.')
+        });
+
+// Removing all child elements from Container before creating new set of elements
                         while (container.firstChild) {
                             container.removeChild(container.firstChild);
                         };
@@ -107,5 +114,4 @@ searchBar.addEventListener('keyup', (event) => {
                 };
                 return alert("Are you sure you aren't holding your map upside down?");
             });
-    };
-});
+
