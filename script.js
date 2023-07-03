@@ -51,6 +51,22 @@ const fetchWeatherData = async (lat, lon) => {
         console.error('Error');
     }};
        
+
+//  const [currentData, forecastData] = await Promise.all([
+//     getCurrentWeatherData(city)
+//      ]);
+
+//   // Display current weather
+//   cityElement.innerText = currentData.name;
+//   tempElement.innerText = Math.round(currentData.main.temp);
+//   descElement.innerText = currentData.weather[0].description;
+//   weatherIconElement.setAttribute(
+//     "src",
+//     `http://openweathermap.org/img/wn/${currentData.weather[0].icon}.png`
+//   );
+//   maxTempElement.innerText = Math.round(currentData.main.temp_max);
+//   minTempElement.innerText = Math.round(currentData.main.temp_min);
+
 const createCards = (data) => {
     
   console.log(data.list[0].weather);
